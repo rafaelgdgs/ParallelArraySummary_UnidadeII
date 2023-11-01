@@ -4,6 +4,12 @@ public class ParallelArrayObject {
     private int total;
     private int grupo;
 
+    public ParallelArrayObject(int _id, int _total, int _grupo) {
+        id = _id;
+        total = _total;
+        grupo = _grupo;
+    }
+
     public int getId() {
         return id;
     }
