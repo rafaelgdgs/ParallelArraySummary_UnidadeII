@@ -1,36 +1,36 @@
 public class ParallelArrayObject {
 
-    private long id;
-    private double total;
-    private int grupo;
+    private int id;
+    private float total;
+    private byte grupo;
 
-    public ParallelArrayObject(long _id, double _total, int _grupo) {
+    public ParallelArrayObject(int _id, float _total, byte _grupo) {
         id = _id;
         total = _total;
         grupo = _grupo;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long _id) {
+    public void setId(int _id) {
         id = _id;
     }
 
-    public double getTotal() {
+    public float getTotal() {
         return total;
     }
 
-    public void setTotal(double _total) {
+    public void setTotal(float _total) {
         total = _total;
     }
 
-    public int getGrupo() {
+    public byte getGrupo() {
         return grupo;
     }
 
-    public void setGrupo(int _grupo) {
+    public void setGrupo(byte _grupo) {
         grupo = _grupo;
     }
 }
