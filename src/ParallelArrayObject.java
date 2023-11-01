@@ -1,10 +1,10 @@
 public class ParallelArrayObject {
 
     private int id;
-    private int total;
+    private double total;
     private int grupo;
 
-    public ParallelArrayObject(int _id, int _total, int _grupo) {
+    public ParallelArrayObject(int _id, double _total, int _grupo) {
         id = _id;
         total = _total;
         grupo = _grupo;
@@ -18,11 +18,11 @@ public class ParallelArrayObject {
         id = _id;
     }
 
-    public int getTotal() {
+    public double getTotal() {
         return total;
     }
 
-    public void setTotal(int _total) {
+    public void setTotal(double _total) {
         total = _total;
     }
 
