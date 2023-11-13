@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
 
 public class Worker extends Thread {
     private int quantidadeMaiores = 0;
@@ -10,7 +8,6 @@ public class Worker extends Thread {
     private byte[] idGrupo;
     private float[] totais;
 
-    //private List<Float> somaGeralGrupos;
 
     public double[] somaInternaGrupos = new double[5];
 
@@ -21,7 +18,7 @@ public class Worker extends Thread {
         for (int i = 0; i < 5; i++) {
             somaInternaGrupos[i] = 0;
         }
-       // this.somaGeralGrupos = somaGeralGrupos;
+
         this.idGrupo = idGrupo;
         this.totais = totais;
         this.startIndex = startIndex;

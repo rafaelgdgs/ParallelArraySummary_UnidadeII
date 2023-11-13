@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class Tester {
-    private int[] valoresN = { 5, 7, 9};
-    private int[] valoresT = { 1, 4, 16, 64, 256};
+    private final int[] valoresN = { 5, 7, 9};
+    private final int[] valoresT = { 1, 4, 16, 64, 256};
 
 
 

@@ -1,55 +1,73 @@
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
+
+import static java.lang.System.currentTimeMillis;
 
 
 public class ParallelArraySumary {
 
-    //ParallelArrayObject[] lista;
     public byte[] idGrupo;
     public float[] totais;
 
     private int limit;
 
-//    List<String> list = new ArrayList<String>();
-//    List<String> synlist = Collections.synchronizedList(list);
+
 
     public void Carregamento(int N) {
 
-        Random random = new Random();
         this.limit = (int) Math.pow(10.0, N);
-        //lista = new ParallelArrayObject[limit];
         idGrupo = new byte[limit];
         totais = new float[limit];
 
         System.out.println(limit);
+        long startTime = currentTimeMillis();
 
-        for (int i = 0; i < limit; i++) {
+        int totalCarreadores = 10;
+        Carregador[] carregadores = new Carregador[totalCarreadores];
+        int startIndex = 0;
+        int load = limit / totalCarreadores;
+        for (int i = 0; i < totalCarreadores; i++) {
 
-            //lista[i] = (new ParallelArrayObject(i, random.nextFloat(10.0f), (byte) random.nextInt(6)));
-            idGrupo[i] = (byte) random.nextInt(5);
-            totais[i] = random.nextFloat(10.0f);
+            //para divisões com resto != 0, adiciona o resto ao load da ultima threrad
+            if (i == totalCarreadores - 1) {
+                load += limit % totalCarreadores;
+            }
+            carregadores[i] = new Carregador("Carregador " + (i + 1), idGrupo, totais, startIndex,load);
+            startIndex += load;
+        }
+        for (int i = 0; i < totalCarreadores; i++) {
+            carregadores[i].start();
+        }
 
-            if (i % 100000000 == 0) {
-                System.out.println("100 milhoes");
+        for (int i = 0; i < totalCarreadores; i++) {
+            try {
+                carregadores[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            finally {
+                System.out.println(carregadores[i].getName() + " finalizou");
             }
         }
+
+//        Random random = new Random();
+//        for (int i = 0; i < limit; i++) {
+//
+//            //lista[i] = (new ParallelArrayObject(i, random.nextFloat(10.0f), (byte) random.nextInt(6)));
+//            idGrupo[i] = (byte) random.nextInt(5);
+//            totais[i] = random.nextFloat(10.0f);
+//
+//            if (i % 100000000 == 0) {
+//                System.out.println("100 milhoes");
+//            }
+//        }
+
         System.out.println(totais.length);
+        System.out.println("tempo de carregamento: " + (currentTimeMillis()-startTime));
     }
 
     public void Processamento(int T) {
-//        List<Float>[] grupos = new ArrayList[5];
-//        List<Float>[] gruposSincronizados = new List[5];
-//
-//        // initializing
-//        for (int i = 0; i < 5; i++) {
-//            grupos[i] = new ArrayList<Float>();
-//            gruposSincronizados[i] = Collections.synchronizedList(grupos[i]);
-//        }
-//        List<Float> grupos = new ArrayList<Float>();
-//        List<Float> gruposSincronizados = Collections.synchronizedList(grupos);
+
         double[] grupos = new double[5];
 
         int quantidadeMaiores = 0;

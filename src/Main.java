@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
         ParallelArraySumary a = new ParallelArraySumary();
         a.Carregamento(9);
-        a.Processamento(4);
+        a.Processamento(256);
 
 
 //        Tester tester = new Tester();
