@@ -19,7 +19,7 @@ public class ParallelArraySumary {
         idGrupo = new byte[limit];
         totais = new float[limit];
 
-        System.out.println(limit);
+        //System.out.println(limit);
         long startTime = currentTimeMillis();
 
         int totalCarreadores = 10;
@@ -46,7 +46,7 @@ public class ParallelArraySumary {
                 e.printStackTrace();
             }
             finally {
-                System.out.println(carregadores[i].getName() + " finalizou");
+                //System.out.println(carregadores[i].getName() + " finalizou");
             }
         }
 
@@ -62,11 +62,11 @@ public class ParallelArraySumary {
 //            }
 //        }
 
-        System.out.println(totais.length);
+        //System.out.println(totais.length);
         System.out.println("tempo de carregamento: " + (currentTimeMillis()-startTime));
     }
 
-    public void Processamento(int T) {
+    public Resultados Processamento(int T) {
 
         double[] grupos = new double[5];
 
@@ -101,27 +101,30 @@ public class ParallelArraySumary {
                 quantidadeMenores += workers[i].getQuantidadeMenores();
             }
         }
-        System.out.println("quantidadeMaiores: "+ quantidadeMaiores);
-        System.out.println("quantidadeMenores: "+ quantidadeMenores);
+//        System.out.println("quantidadeMaiores: "+ quantidadeMaiores);
+//        System.out.println("quantidadeMenores: "+ quantidadeMenores);
         for (int i=0;i<5;i++){
             for(int j=0;j<T;j++){
                 grupos[i] +=  workers[j].somaInternaGrupos[i];
             }
-            BigDecimal bigDecimal = new BigDecimal(String.valueOf(grupos[i]));
-            System.out.println("soma do grupo "+(i+1)+": "+ bigDecimal.toPlainString());
+//            BigDecimal bigDecimal = new BigDecimal(String.valueOf(grupos[i]));
+//            System.out.println("soma do grupo "+(i+1)+": "+ bigDecimal.toPlainString());
             somaTotais += grupos[i];
         }
-        for (int i=0;i<5;i++){
-            System.out.println("soma do grupo "+(i+1)+" é menor que total: " + (grupos[i]< somaTotais));
-        }
 
-        BigDecimal bigDecimal = new BigDecimal(String.valueOf(somaTotais));
-        var longValue = bigDecimal.longValue();
-        System.out.println("soma totais: "+ bigDecimal.toPlainString());
-        System.out.println("parte inteira: " + longValue);
-        System.out.println("parte fracional: " + bigDecimal.subtract(
-                new BigDecimal(longValue)).toPlainString());
-        System.out.println("All printing jobs have been finished.");
+//        for (int i=0;i<5;i++){
+//            System.out.println("soma do grupo "+(i+1)+" é menor que total: " + (grupos[i]< somaTotais));
+//        }
+
+//        BigDecimal bigDecimal = new BigDecimal(String.valueOf(somaTotais));
+//        var longValue = bigDecimal.longValue();
+//        System.out.println("soma totais: "+ bigDecimal.toPlainString());
+//        System.out.println("parte inteira: " + longValue);
+//        System.out.println("parte fracional: " + bigDecimal.subtract(
+//                new BigDecimal(longValue)).toPlainString());
+//        System.out.println("All printing jobs have been finished.");
+
+        return new Resultados(quantidadeMaiores,quantidadeMenores,grupos,somaTotais);
     }
 
 }
