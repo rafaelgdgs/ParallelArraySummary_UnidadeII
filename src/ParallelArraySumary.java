@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,7 +50,7 @@ public class ParallelArraySumary {
 //        }
 //        List<Float> grupos = new ArrayList<Float>();
 //        List<Float> gruposSincronizados = Collections.synchronizedList(grupos);
-        float[] grupos = new float[5];
+        double[] grupos = new double[5];
 
         int quantidadeMaiores = 0;
         int quantidadeMenores = 0;
@@ -88,10 +89,20 @@ public class ParallelArraySumary {
             for(int j=0;j<T;j++){
                 grupos[i] +=  workers[j].somaInternaGrupos[i];
             }
-            System.out.println("soma do grupo "+(i+1)+": "+ grupos[i]);
+            BigDecimal bigDecimal = new BigDecimal(String.valueOf(grupos[i]));
+            System.out.println("soma do grupo "+(i+1)+": "+ bigDecimal.toPlainString());
             somaTotais += grupos[i];
         }
-        System.out.println("soma totais: "+ somaTotais);
+        for (int i=0;i<5;i++){
+            System.out.println("soma do grupo "+(i+1)+" é menor que total: " + (grupos[i]< somaTotais));
+        }
+
+        BigDecimal bigDecimal = new BigDecimal(String.valueOf(somaTotais));
+        var longValue = bigDecimal.longValue();
+        System.out.println("soma totais: "+ bigDecimal.toPlainString());
+        System.out.println("parte inteira: " + longValue);
+        System.out.println("parte fracional: " + bigDecimal.subtract(
+                new BigDecimal(longValue)).toPlainString());
         System.out.println("All printing jobs have been finished.");
     }
 

@@ -12,7 +12,7 @@ public class Worker extends Thread {
 
     //private List<Float> somaGeralGrupos;
 
-    public float[] somaInternaGrupos = new float[5];
+    public double[] somaInternaGrupos = new double[5];
 
 
     public Worker(String name, byte[] idGrupo, float[] totais, int startIndex, int load) {
@@ -43,14 +43,6 @@ public class Worker extends Thread {
             if(totais[i] < 5) quantidadeMenores++;
             else quantidadeMaiores++;
         }
-//        try{
-//            for (int i = 0; i < 5; i++) {
-////                somaGeralGrupos.get(i).add([i],somaGeralGrupos[i]+somaInternaGrupos[i]);
-//                somaGeralGrupos.add(i, somaGeralGrupos.get(i) + somaInternaGrupos[i]) ;
-//            }
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
 
     }
 }

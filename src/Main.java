@@ -3,8 +3,8 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
         ParallelArraySumary a = new ParallelArraySumary();
-        a.Carregamento(7);
-        a.Processamento(16);
+        a.Carregamento(9);
+        a.Processamento(4);
 
 
 //        Tester tester = new Tester();
