@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"math/rand"
 	"sync"
 	"time"
@@ -14,7 +15,7 @@ type object struct {
 
 func loadArray(N int) []object {
 	var array []object
-	for i := 1; i <= N*10; i++ {
+	for i := 1; i <= int(math.Pow10(N)); i++ {
 		array = append(array, object{i, rand.Intn(5) + 1, rand.Float64() * 10})
 	}
 	return array
