@@ -8,68 +8,110 @@ import (
 	"time"
 )
 
-type object struct {
-	id, grupo int
-	total     float64
+type Object struct {
+	ID    int
+	Total float64
+	Grupo int
 }
 
-func loadArray(N int) []object {
-	var array []object
-	for i := 1; i <= int(math.Pow10(N)); i++ {
-		array = append(array, object{i, rand.Intn(5) + 1, rand.Float64() * 10})
+func loadArray(N int) []Object {
+	var array []Object
+	for i := 1; i <= int(math.Pow(10, float64(N))); i++ {
+		array = append(array, Object{i, rand.Float64() * 10, rand.Intn(5) + 1})
 	}
 	return array
 }
 
-func processArray(array []object, T int) {
+func processArray(array []Object, T int) {
 	var wg sync.WaitGroup
-	wg.Add(T)
 	startTime := time.Now()
 
-	for i := 0; i < T; i++ {
-		go func(id int) {
-			defer wg.Done()
-			if id == 0 {
-				var sum float64
-				for _, obj := range array {
-					sum += obj.total
-				}
-				fmt.Printf("Somatório dos Totais: %.2f\n", sum)
-			}
-			if id == 1 {
-				groupSum := make(map[int]float64)
-				for _, obj := range array {
-					groupSum[obj.grupo] += obj.total
-				}
-				fmt.Println("Somatório dos subtotais por grupo:")
-				for group, sum := range groupSum {
-					fmt.Printf("Grupo %d: %.2f\n", group, sum)
-				}
-			}
-			if id == 2 {
-				var count int
-				for _, obj := range array {
-					if obj.total < 5 {
-						count++
-					}
-				}
-				fmt.Printf("Nº de elementos com Total menor que 5: %d\n", count)
-			}
-			if id == 3 {
-				var count int
-				for _, obj := range array {
-					if obj.total >= 5 {
-						count++
-					}
-				}
-				fmt.Printf("Nº de elementos com Total >= 5: %d\n", count)
-			}
-		}(i)
+	taskChan := make(chan Object, len(array))
+	resultsChan := make(chan Result, len(array)*4)
+
+	for _, obj := range array {
+		taskChan <- obj
 	}
-	wg.Wait()
+	close(taskChan)
+
+	for i := 0; i < T; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			processTasks(taskChan, resultsChan)
+		}()
+	}
+
+	go func() {
+		wg.Wait()
+		close(resultsChan)
+	}()
+
+	var results []Result
+	for result := range resultsChan {
+		results = append(results, result)
+	}
+
+	printResults(results)
 
 	elapsedTime := time.Since(startTime)
-	fmt.Printf("Tempo gasto na etapa de Processamento: %s\n", elapsedTime)
+	fmt.Printf("Tempo gasto na etapa de Processamento: %.6fms\n", elapsedTime.Seconds()*1000)
+}
+
+func printResults(results []Result) {
+	var total float64
+	groupTotals := make(map[int]float64)
+	countTotalLessThan5 := 0
+	countTotalGreaterEqual5 := 0
+
+	for _, result := range results {
+		switch result.Type {
+		case Total:
+			total += result.Value
+		case Subtotal:
+			groupTotals[result.Group] += result.Value
+		case CountLessThan5:
+			countTotalLessThan5 += int(result.Value)
+		case CountGreaterEqual5:
+			countTotalGreaterEqual5 += int(result.Value)
+		}
+	}
+
+	fmt.Printf("Nº de elementos com Total >= 5: %d\n", countTotalGreaterEqual5)
+	fmt.Printf("Somatório dos Totais: %.2f\n", total)
+	fmt.Printf("Nº de elementos com Total menor que 5: %d\n", countTotalLessThan5)
+	fmt.Println("Somatório dos subtotais por grupo:")
+	for group, subtotal := range groupTotals {
+		fmt.Printf("Grupo %d: %.2f\n", group, subtotal)
+	}
+}
+
+func processTasks(taskChan <-chan Object, resultsChan chan<- Result) {
+	for task := range taskChan {
+		switch {
+		case task.Total >= 5:
+			resultsChan <- Result{Type: CountGreaterEqual5, Value: 1}
+			resultsChan <- Result{Type: Total, Value: task.Total}
+		case task.Total < 5:
+			resultsChan <- Result{Type: CountLessThan5, Value: 1}
+		}
+		resultsChan <- Result{Type: Subtotal, Group: task.Grupo, Value: task.Total}
+	}
+}
+
+type ResultType int
+
+const (
+	Total ResultType = iota
+	Subtotal
+	CountLessThan5
+	CountGreaterEqual5
+)
+
+type Result struct {
+	Type  ResultType
+	Group int
+	Value float64
 }
 
 func main() {
@@ -85,3 +127,4 @@ func main() {
 		}
 	}
 }
+
